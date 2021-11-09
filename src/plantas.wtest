@@ -1,0 +1,41 @@
+import plantas.*
+
+test "una menta de 1 metro, da semillas y ocupa un espacio de 3 m2" {
+	const menta = new Menta(anioDeObtencion = 2001, altura = 1)
+	assert.that(menta.daNuevasSemillas())
+	assert.equals(3, menta.espacioQueOcupa())
+}
+
+test "una menta de 0.3 metros, no da semillas y ocupa un espacio de 0.9 m2" {
+	const menta2 = new Menta(anioDeObtencion = 2003, altura = 0.3)
+	assert.notThat(menta2.daNuevasSemillas())
+	assert.equals(0.9, menta2.espacioQueOcupa())
+}
+
+test "una hierbabuena de 0.3 metros, ocupa un espacio de 1.8 m2" {
+	const hierbabuena = new Hierbabuena(anioDeObtencion = 2003, altura = 0.3)
+	assert.equals(1.8, hierbabuena.espacioQueOcupa())
+}
+
+test "una soja de 0.6 metros, con una semilla de 2009" {
+	const soja = new Soja(anioDeObtencion = 2009, altura = 0.6)
+	assert.equals(7, soja.horasDeSolToleradas())
+	assert.notThat(soja.daNuevasSemillas())
+	assert.equals(0.3, soja.espacioQueOcupa())
+}
+
+test "quinoa tolera con semilla de 2010, tolera 12 horas de sol y da semillas" {
+	const quinoa = new Quinoa(anioDeObtencion = 2010, altura = 0.5, solTolerado = 12)
+	assert.that(quinoa.daNuevasSemillas())
+}
+
+test "quinoa tolera con semilla de 2001, tolera 9 horas de sol y da semillas" {
+	const quinoa2 = new Quinoa(anioDeObtencion = 2001, altura = 0.5, solTolerado = 9)
+	assert.that(quinoa2.daNuevasSemillas())
+}
+
+test "la soja transgenica aunque tenga todas las condiciones de la soja, no da semillas" {
+	const sojaTransgenica = new SojaTransgenica(anioDeObtencion = 2009, altura = 1.1)
+	assert.notThat(sojaTransgenica.daNuevasSemillas())
+}
+

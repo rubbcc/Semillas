@@ -1,0 +1,37 @@
+import plantas.*
+import parcelas.*
+import inta.*
+
+describe "varias parcelas y el inta" {
+	const menta = new Menta(anioDeObtencion = 2001, altura = 1)
+	const menta2 = new Menta(anioDeObtencion = 2001, altura = 0.5)
+	const soja = new Soja(anioDeObtencion = 2009, altura = 0.6)
+	const soja2 = new Soja(anioDeObtencion = 2004, altura = 0.3)
+	const quinoa = new Quinoa(anioDeObtencion = 2010, altura = 0.5, solTolerado = 12)
+	const quinoa2 = new Quinoa(anioDeObtencion = 2001, altura = 0.5, solTolerado = 9)
+	const sojaTransgenica = new SojaTransgenica(anioDeObtencion = 2009, altura = 1.1)
+	const hierbabuena = new Hierbabuena(anioDeObtencion = 2011, altura = 0.8)
+	const conjuntoPlantas1 = #{menta,soja,quinoa,quinoa2,menta2}
+	const conjuntoPlantas2 = #{quinoa,soja2}
+	const conjuntoPlantas3 = #{sojaTransgenica,soja,quinoa,quinoa2,hierbabuena}
+	const conjuntoPlantas4 = #{hierbabuena,menta2,quinoa}
+	const parcela1 = new ParcelaEcologica(ancho = 15, largo = 2, horasDeSolPorDia = 7, plantas = conjuntoPlantas1)
+	const parcela2 = new ParcelaEcologica(ancho = 10, largo = 1.5, horasDeSolPorDia = 10, plantas = conjuntoPlantas2)
+	const parcela3 = new ParcelaIndustrial(ancho = 5, largo = 5, horasDeSolPorDia = 9, plantas = conjuntoPlantas3)
+	const parcela4 = new ParcelaIndustrial(ancho = 30, largo = 1, horasDeSolPorDia = 11, plantas = conjuntoPlantas4)
+	
+	method initialize() {
+		inta.agregarParcela(parcela1)
+		inta.agregarParcela(parcela2)
+		inta.agregarParcela(parcela3)
+		inta.agregarParcela(parcela4)
+	}
+	
+	test "hay un promedio de 3,75 plantas por parcela" {
+		assert.equals(3.75, inta.promedioDePlantas())
+	}
+	
+	test "la parcela mas autosustentable es la parcela1" {
+		assert.equals(parcela1, inta.parcelaMasAutosustentable())
+	}
+}

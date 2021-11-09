@@ -1,0 +1,88 @@
+import plantas.*
+import parcelas.*
+
+describe "una parcela ecologica y varias plantas" {
+	const menta = new Menta(anioDeObtencion = 2001, altura = 1)
+	const soja = new Soja(anioDeObtencion = 2009, altura = 0.6)
+	const quinoa = new Quinoa(anioDeObtencion = 2010, altura = 0.5, solTolerado = 12)
+	const quinoa2 = new Quinoa(anioDeObtencion = 2001, altura = 0.5, solTolerado = 9)
+	const sojaTransgenica = new SojaTransgenica(anioDeObtencion = 2009, altura = 1.1)
+	const parcela = new ParcelaEcologica(ancho = 20, largo = 1, horasDeSolPorDia = 8)
+	
+	method initialize() {
+		parcela.plantarUnaPlanta(sojaTransgenica)
+		parcela.plantarUnaPlanta(quinoa)
+		parcela.plantarUnaPlanta(quinoa2)
+		parcela.plantarUnaPlanta(soja)
+	}
+	
+	test "la parcela tiene complicaciones" {
+		assert.that(parcela.tieneComplicaciones())
+	} 
+	
+	test "el maximo de plantas toleradas de la parcela es 4" {
+		assert.equals(4, parcela.maximoDePlantasToleradas())
+	}
+	
+	test "la superficie de la parcela es de 20 m2" {
+		assert.equals(20, parcela.superficie())
+	}
+	
+	test "plantar una nueva planta me genera un error al no poder hacerlo" {
+		assert.throwsExceptionWithMessage("La planta no pudo ser plantada.", {parcela.plantarUnaPlanta(menta)})
+	}
+	
+	test "para la menta la parcela es ideal" {
+		assert.that(menta.esParcelaIdeal(parcela))
+	}
+	
+	test "para la soja la parcela no es ideal" {
+		assert.notThat(soja.esParcelaIdeal(parcela))
+	}
+	
+	test "para la soja transgenica la parcela no es ideal" {
+		assert.notThat(sojaTransgenica.esParcelaIdeal(parcela))
+	}
+	
+	test "para la quinoa la parcela es ideal" {
+		assert.that(quinoa.esParcelaIdeal(parcela))
+	}
+}
+
+describe "parcela ecologica" {
+	const parcela = new ParcelaEcologica(ancho = 20, largo = 1, horasDeSolPorDia = 8)
+	const menta = new Menta(anioDeObtencion = 2001, altura = 1)
+	const soja = new Soja(anioDeObtencion = 2009, altura = 0.6)
+	
+	test "la parcela se asocia bien con la menta" {
+		assert.that(parcela.seAsociaBien(menta))
+	}
+	
+	test "si se agrega una planta de soja ya no se asocia bien con la menta" {
+		parcela.plantarUnaPlanta(soja)
+		assert.notThat(parcela.seAsociaBien(menta))
+	}
+}
+
+describe "parcela industrial" {
+	const parcela = new ParcelaIndustrial(ancho = 20, largo = 1, horasDeSolPorDia = 8)
+	const soja = new Soja(anioDeObtencion = 2009, altura = 0.6)
+	const soja2 = new Soja(anioDeObtencion = 2003, altura = 0.8)
+	const quinoa = new Quinoa(anioDeObtencion = 2010, altura = 0.5, solTolerado = 12)
+	const sojaTransgenica = new SojaTransgenica(anioDeObtencion = 2009, altura = 1.1)	
+
+	test "la parcela no se asocia bien con la menta" {
+		assert.notThat(parcela.seAsociaBien(soja))
+	}
+	
+	test "la parcela se asocia bien con la quinoa" {
+		assert.that(parcela.seAsociaBien(quinoa))
+	}
+	
+	test "luego de agregar 3 plantas, ya no se asocia bien con la quinoa" {
+		parcela.plantarUnaPlanta(soja)
+		parcela.plantarUnaPlanta(soja2)
+		parcela.plantarUnaPlanta(sojaTransgenica)
+		assert.notThat(parcela.seAsociaBien(quinoa))
+	}
+}
